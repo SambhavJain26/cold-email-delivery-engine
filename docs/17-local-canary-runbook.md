@@ -1,5 +1,35 @@
 # Local canary runbook (B8.3-local) — two-week validation on throwaway Gmail
 
+## 2026-11-05 IST midnight reservation correction — implemented and verified locally
+
+The operator explicitly requested fixing the diagnosed reservation bug. The local correction
+compares the timezone's whole-second wall-clock parts to a whole-second UTC timestamp, so
+input milliseconds cannot leak into local-midnight anchors. Both day-start cap counting and
+next-midnight reservation cutoffs now use exact instants. No migration, persisted schedule
+recalculation, cap/range change or event vocabulary change is required.
+
+All six added unit cases reproduced the defect before the source correction, then passed
+after it. Coverage includes the November 3 production timestamp, just before/after local
+midnight, spring-forward (23 hours), fall-back (25 hours) and Kolkata's half-hour offset.
+Full unit suite passes 431/431; typecheck, lint and format check pass.
+
+Seven targeted scheduler/spacing/review/business-day integration suites pass 59/59. Added
+database boundary cases keep work due one millisecond before tomorrow included and work
+due exactly at tomorrow's midnight excluded. A real scheduler/MockTransport regression
+sends a pending opener into the slot previously consumed by tomorrow's follow-up, preserves
+that follow-up's step/date, and still stops at its daily cap. A second regression counts a
+send in today's first 100 milliseconds toward the cap, preventing an extra opener.
+
+Full API suite passes 193/193. Locked golden passes exactly 47/47 with unchanged fixtures
+and expectations (435 seconds), including populated projection replay checks. DB-backed
+Vitest invocations ran serially. The existing pg query deprecation warning is non-blocking.
+All required local checks are complete. No production connection, setting/campaign/enrollment mutation,
+external send or deployment was performed for this local fix. Production remains at the
+last verified application `7c48d24`; rollout requires explicit per-deployment authorization.
+Fresh production inspection, authorized paused campaign state, validated pre/post backups
+and protected-state comparison remain required for rollout. The fix recalculates live
+capacity from existing dates; it does not need a saved-date or historical-event repair.
+
 ## 2026-11-05 IST low daily sends — read-only diagnosis verified
 
 The operator asked why November 3/4 mailbox totals stayed below 25 with due leads.
@@ -61,7 +91,8 @@ queue counts; all catch-up alerts were acknowledged at this inspection.
 Canonical replay: 588 enrollments, zero differences; self-check clean. Inspection watermark
 was 3,621 events / 1,379 sends, with normal operator-enabled workers continuing independently.
 No agent code fix, settings edit, campaign pause/resume, enrollment or outbound batch was
-performed. This is verified diagnosis only; the midnight correction remains unimplemented.
+performed. This was diagnosis only; the subsequently authorized local correction is now
+implemented and verified in the section above. It has not been deployed.
 
 ## 2026-10-29 IST mailbox fixes — authorized deployment and campaign pauses verified
 

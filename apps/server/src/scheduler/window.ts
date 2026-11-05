@@ -69,7 +69,9 @@ export function insideWindow(w: SendWindow, now: Date, tz: string): boolean {
 function tzOffsetMs(now: Date, tz: string): number {
   const p = localParts(now, tz);
   const asUTC = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
-  return asUTC - now.getTime();
+  // Intl parts have whole-second precision. Compare at the same precision so
+  // fractional input milliseconds cannot leak into midnight/reset boundaries.
+  return asUTC - Math.floor(now.getTime() / 1000) * 1000;
 }
 
 /** The UTC instant of the most recent local midnight in `tz` (cap-reset anchor). */

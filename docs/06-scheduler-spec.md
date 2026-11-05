@@ -218,6 +218,11 @@ capacityToday(campaign):
   suggested    = min(roomForNew, capRemaining, poolAvailable when pool-backed)
 ```
 
+For the reservation calculation, today's interval starts at exact mailbox-local midnight (inclusive)
+and ends at exact next mailbox-local midnight (exclusive), both with zero milliseconds.
+Tomorrow's midnight follow-ups never reserve today's opener/enrollment slots. These boundaries
+remain exact for fractional input timestamps and 23/25-hour DST days.
+
 Manual and automatic enrollments consume the same effective campaign cap. During the configured
 ramp, the matching stage is the cap; beginning the next application-local date after the final
 stage, `steady_daily_enroll_cap` applies forever. Unused capacity never carries forward. Draft

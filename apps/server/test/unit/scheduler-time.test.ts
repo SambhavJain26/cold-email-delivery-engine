@@ -76,6 +76,53 @@ describe('insideWindow (docs/06 §4)', () => {
 });
 
 describe('startOfLocalDay — the cap-reset anchor (no reset cron)', () => {
+  it.each([
+    [
+      'America/New_York',
+      '2026-11-03T18:00:00.286Z',
+      '2026-11-03T05:00:00.000Z',
+      '2026-11-04T05:00:00.000Z',
+    ],
+    [
+      'America/New_York',
+      '2026-11-04T04:59:59.999Z',
+      '2026-11-03T05:00:00.000Z',
+      '2026-11-04T05:00:00.000Z',
+    ],
+    [
+      'America/New_York',
+      '2026-11-04T05:00:00.001Z',
+      '2026-11-04T05:00:00.000Z',
+      '2026-11-05T05:00:00.000Z',
+    ],
+    [
+      'America/New_York',
+      '2026-03-08T15:00:00.286Z',
+      '2026-03-08T05:00:00.000Z',
+      '2026-03-09T04:00:00.000Z',
+    ],
+    [
+      'America/New_York',
+      '2026-11-01T15:00:00.999Z',
+      '2026-11-01T04:00:00.000Z',
+      '2026-11-02T05:00:00.000Z',
+    ],
+    [
+      'Asia/Kolkata',
+      '2026-11-03T18:30:00.001Z',
+      '2026-11-03T18:30:00.000Z',
+      '2026-11-04T18:30:00.000Z',
+    ],
+  ])(
+    'uses exact midnight boundaries with fractional timestamps: %s %s',
+    (zone, input, start, end) => {
+      const now = new Date(input);
+      expect(startOfLocalDay(now, zone).toISOString()).toBe(start);
+      expect(startOfNextLocalDay(now, zone).toISOString()).toBe(end);
+      expect(now.toISOString()).toBe(input);
+    },
+  );
+
   it('returns the UTC instant of local midnight', () => {
     const now = new Date('2026-01-05T14:00:00Z'); // 09:00 ET
     expect(startOfLocalDay(now, 'America/New_York').toISOString()).toBe('2026-01-05T05:00:00.000Z');

@@ -99,6 +99,9 @@ it.each([
   ['America/New_York', '2026-03-08T06:30:00Z', '2026-03-09T04:00:00.000Z'],
   ['America/New_York', '2026-11-01T05:30:00Z', '2026-11-02T05:00:00.000Z'],
   ['Asia/Kolkata', '2026-01-05T19:00:00Z', '2026-01-06T18:30:00.000Z'],
+  ['America/New_York', '2026-11-03T18:00:00.286Z', '2026-11-04T05:00:00.000Z'],
+  ['America/New_York', '2026-03-08T15:00:00.286Z', '2026-03-09T04:00:00.000Z'],
+  ['America/New_York', '2026-11-01T15:00:00.999Z', '2026-11-02T05:00:00.000Z'],
 ])('uses mailbox-local midnight including DST: %s %s', async (zone, now, end) => {
   await setup(1, 3, 2);
   s.clock.set(now);
@@ -107,6 +110,56 @@ it.each([
   await followup(2, 3, 1, end);
   expect(startOfNextLocalDay(s.clock.now(), zone).toISOString()).toBe(end);
   expect((await mailboxCapacity(s.db, (await getById(s.db, 1))!, s.clock.now())).followups).toBe(1);
+});
+
+it('sends a pending opener instead of reserving today for a follow-up due exactly tomorrow', async () => {
+  await setup(1, 1, 2);
+  s.clock.set('2026-11-03T18:00:00.286Z');
+  await followup(1, 2, 1, '2026-11-04T05:00:00.000Z');
+  expect(await mailboxCapacity(s.db, (await getById(s.db, 1))!, s.clock.now())).toMatchObject({
+    followups: 0,
+    openerSlots: 1,
+  });
+  expect((await s.scheduler.tick()).sent).toBe(1);
+  expect(s.mock.sentLog[0]!.msg.to).toBe(leadEmail('L0002'));
+  expect(s.mock.sentLog[0]!.msg.mailboxId).toBe(1);
+  const tomorrow = await s.pool.query(
+    'SELECT current_step_no,next_send_at FROM enrollments WHERE lead_id=1',
+  );
+  expect(tomorrow.rows[0].current_step_no).toBe(2);
+  expect(tomorrow.rows[0].next_send_at.toISOString()).toBe('2026-11-04T05:00:00.000Z');
+  expect((await s.scheduler.tick()).sent).toBe(0); // cap is still enforced
+});
+
+it('counts a send in the first milliseconds of today toward the daily cap', async () => {
+  await setup(1, 1, 2);
+  s.clock.set('2026-11-03T18:00:00.286Z');
+  await s.store.append(
+    [
+      buildEvent.sent({
+        leadId: 1,
+        enrollmentId: 1,
+        campaignId: 1,
+        stepNo: 1,
+        mailboxId: 1,
+        occurredAt: new Date('2026-11-03T05:00:00.100Z'),
+        messageId: '<midnight-cap@scenario.dev>',
+        attributes: { content_hash: 'midnight-cap' },
+      }),
+    ],
+    {
+      patches: [
+        { enrollmentId: 1, nextSendAt: new Date('2026-11-04T05:00:00.000Z'), assignedMailboxId: 1 },
+      ],
+    },
+  );
+  expect(await mailboxCapacity(s.db, (await getById(s.db, 1))!, s.clock.now())).toMatchObject({
+    sent: 1,
+    followups: 0,
+    openerSlots: 0,
+  });
+  expect((await s.scheduler.tick()).sent).toBe(0);
+  expect(s.mock.sentLog).toHaveLength(0);
 });
 
 it('rejects excessive enrollment and overrides without appending facts', async () => {
