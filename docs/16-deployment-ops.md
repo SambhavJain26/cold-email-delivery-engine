@@ -1,5 +1,16 @@
 # Deployment & Operations
 
+## Exact midnight capacity correction — deployed 2026-11-05
+
+Explicitly approved `1709584` is deployed with approved Campaigns 3/4 pauses; Campaigns
+2/3/4 remain paused and auto-enrollment is off. Four healthy mailboxes retain 25/day,
+3–7 minute ranges and New York weekday 11:00–17:00 windows. No migration or saved-date
+recalculation. All 35 migrations, services/routes, deployed exact-midnight proof,
+588-enrollment zero drift/self-check, identical protected snapshots (3,645 events / 1,403
+sends) and validated pre/post backups/manifests pass. No resume/enrollment/rollout send.
+No authenticated browser replay was performed. Evidence is in docs/17; leave campaigns
+paused for operator review. Future operational mutations require their own authorization.
+
 ## Mailbox action/recovery fixes — deployed 2026-10-29
 
 Explicitly approved `7c48d24` is deployed, with authorized Campaigns 3/4 pauses; Campaigns

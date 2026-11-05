@@ -1,5 +1,60 @@
 # Local canary runbook (B8.3-local) — two-week validation on throwaway Gmail
 
+## 2026-11-05 IST midnight correction — authorized deployment verified
+
+The operator explicitly approved pausing Campaigns 3/4, deploying `1709584`, and leaving
+them paused. Fresh preflight found both active, automatic enrollment off, four healthy
+25/day mailboxes with 3–7 minute ranges and New York weekdays 11:00–17:00. Production
+checkout was clean at `c8f822d`; canonical replay checked 588 enrollments with zero
+differences and self-check was clean. Initial watermarks were 3,643 events / 1,401 sends;
+normal operator-enabled activity accepted two more before the graceful app stop.
+
+Pushed `canary` to `1709584`. Transferred and verified an incremental bundle from `c8f822d`,
+SHA-256 `c8e504ee02d54bb055333371b0171d903b52612de570697425d1f800bc74870c`.
+Gracefully stopped the app, validated a fresh pre-change backup, then guardedly paused
+exactly Campaigns 3/4. Captured the stable paused baseline, fast-forwarded the VPS checkout,
+rebuilt app/gateway/backup and restarted coherently. No migration was added or saved date
+recalculated. Host Caddy/DNS and mailbox settings were unchanged.
+
+Verified outcomes:
+
+- App/database healthy; gateway/backup running; all 35 migrations retained.
+- Campaign 1 archived, Campaigns 2/3/4 paused; automatic enrollment off everywhere.
+- Four mailboxes remain `ok`, configured/effective 25/day, recovery cap NULL, ranges 3–7,
+  New York weekday 11:00–17:00 windows. Global resume percentage remains 100.
+- Canonical replay: 588 enrollments, zero differences; self-check clean after deployment.
+- Protected before/after/final hashes match exactly: complete events, enrollments (including
+  next_send_at, holds/delays/snoozes/retries/progress), sent messages, 24 suppressions, paused
+  campaigns, settings/compliance, mailbox configuration/deadlines excluding poll freshness,
+  sequences/steps/variants, global/campaign personalized copy and campaign lead pools.
+- Stable watermarks: 3,645 events / max ID 3,645 / 1,403 accepted sends and sent messages.
+  Event hash `a946b9969bae3cb4472088574094486b`; enrollment hash
+  `1be3dd8bac2ece17f0edb6911b867bb7`; sent hash `9885016aae02841d6de181105af95353`.
+- A read-only deployed-container probe passes four production/fractional/DST/Kolkata
+  boundary samples. At 16:59:09.647Z, every mailbox's next boundary is exactly
+  Nov 6 05:00:00.000Z and equals the result with a whole-second clock. A direct date-bucket
+  query of paused Campaigns 3/4 shows today's pending follow-ups 23/39/42/41, while tomorrow's
+  51/45/35/34 stay separate. It intentionally inspects paused campaign work by ID, without
+  resuming campaigns or driving scheduler/transport. Connection enforces read-only mode.
+- Local and deployed helper SHA-256 both equal
+  `455a66557aeb5a85e19dffd13eeda60800722bf1b2f7c7b4f55c44f5cc724a49`.
+- Public health, Mailboxes, Campaigns, version and portfolio return 200; unauthenticated
+  mailbox/settings APIs return 401. Served version `df214a28-76ea-428d-adb2-820d99181978`,
+  web asset `index-CHXXgCbZ.js`. No authenticated browser replay was performed for this
+  backend-only release; local API/integration/golden verification is recorded below.
+- Pre-backup `midnight-deploy-before-20261105.dump`: 5,433,014 bytes; post-backup
+  `midnight-deploy-after-20261105.dump`: 5,433,146 bytes. Both custom-format catalogs
+  validate at 384 lines. Independent live/pre/post deletion manifests retain SHA-256
+  `03c28dfa962555297dafaec6b7b217888364306ced8dc12eee68d39d0ae814d4`.
+- Disk is 58% used, about 9.9 GiB available. No cache/infrastructure cleanup occurred.
+  Build reports the same eight runtime dependency advisories (three moderate, four high,
+  one critical); dependency remediation remains outside this release.
+
+Only the explicitly approved Campaigns 3/4 status pauses changed rollout data. No resume,
+enrollment, outgoing test/batch, acknowledgement, restoration, history rewrite or saved-date
+repair occurred. Leave campaigns paused for operator review; resumption remains the operator's
+action. The correction is live and needs no further recalculation to take effect.
+
 ## 2026-11-05 IST midnight reservation correction — implemented and verified locally
 
 The operator explicitly requested fixing the diagnosed reservation bug. The local correction
@@ -29,6 +84,7 @@ last verified application `7c48d24`; rollout requires explicit per-deployment au
 Fresh production inspection, authorized paused campaign state, validated pre/post backups
 and protected-state comparison remain required for rollout. The fix recalculates live
 capacity from existing dates; it does not need a saved-date or historical-event repair.
+The subsequent explicitly authorized deployment is complete and verified above.
 
 ## 2026-11-05 IST low daily sends — read-only diagnosis verified
 

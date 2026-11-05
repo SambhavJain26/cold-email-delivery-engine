@@ -19,12 +19,20 @@ call planned work implemented.
 
 ## Current operating boundary
 
+**2026-11-05 midnight correction deployed:** explicitly approved `1709584` is pushed/deployed
+with approved Campaigns 3/4 pauses. Campaigns 2/3/4 remain paused, auto-enrollment off; four
+healthy mailboxes retain 25/day, 3–7 minute ranges and New York 11:00–17:00 weekdays.
+All 35 migrations, healthy services/routes, live exact-midnight proof, 588-enrollment zero
+drift/self-check and validated backups/manifests pass. Protected snapshots stay identical
+at 3,645 events / 1,403 sends, including saved dates/history. No resume/enrollment/rollout
+send or schedule recalculation occurred. Authenticated UI was not replayed. See docs/17.
+
 **2026-11-05 midnight correction verified locally:** explicitly requested fix removes
 fractional milliseconds from timezone-offset arithmetic, giving exact inclusive/exclusive
 midnight boundaries for caps and follow-up reservations. Unit 431, targeted integration 59,
 full API 193, locked golden exactly 47, type/lint/format pass. No migration, saved-date/
-event rewrite or production mutation. Deployment and any Campaigns 3/4 pause remain
-separately gated; production's last verified application is `7c48d24`. See docs/17.
+event rewrite or production mutation during local work. Subsequent authorized deployment
+and Campaigns 3/4 pauses are verified above. See docs/17.
 
 **2026-11-05 low-send diagnosis verified:** fresh production has Campaigns 3/4 active,
 auto-enrollment off; four healthy mailboxes 25/day, 3–7 minute ranges, New York 11:00–17:00.
@@ -33,7 +41,7 @@ tomorrow's midnight follow-ups in today's reservations, blocking eight valid pen
 Nov 3/4 sends were 38/62; Nov 4 had 62 actual follow-ups, so eight released openers alone
 would yield 70, not 100. Today's genuine follow-ups suffice for remaining capacity.
 588-enrollment zero drift/self-check pass. No code/settings/campaign/enrollment/send mutation;
-The local midnight correction is verified above, not deployed. See docs/17; do not assume older paused state.
+The subsequent midnight correction and authorized rollout are verified above. See docs/17.
 
 **2026-10-29 mailbox fixes deployed:** explicitly approved `7c48d24` is pushed/deployed,
 with explicitly approved Campaigns 3/4 pauses. Campaigns 2/3/4 remain paused, automatic

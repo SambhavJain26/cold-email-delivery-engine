@@ -1,11 +1,18 @@
 # PROGRESS — Cold Email Campaign Tool
 
+**2026-11-05 IST midnight rollout:** [x] explicitly authorized, pushed/deployed `1709584`
+and paused Campaigns 3/4, leaving them paused. All mailboxes remain 25/day; auto-enrollment
+off. All 35 migrations, services/routes, live exact-midnight proof, 588-enrollment zero
+drift/self-check, identical protected snapshots (3,645 events / 1,403 sends) and validated
+backups/manifests pass. No resume, enrollment, rollout send or saved-date recalculation.
+No authenticated browser replay; evidence is in docs/17.
+
 **2026-11-05 IST midnight correction:** [x] explicitly requested fix implemented and
 verified locally. Exact midnight boundaries free opener capacity previously reserved for
 tomorrow and count sends at today's start correctly. Unit 431/431, targeted integration
 59/59, full API 193/193, locked golden exactly 47/47 and type/lint/format pass.
-No migration, stored-date/history rewrite or production mutation. Deployment and campaign
-pauses remain separately gated; evidence is in docs/17.
+No migration, stored-date/history rewrite or production mutation during local verification.
+Subsequently authorized deployment and campaign pauses are verified above; evidence is in docs/17.
 
 **2026-11-05 IST low sends:** [x] read-only diagnosis/reproduction complete. Fractional
 milliseconds in local-midnight helpers inflate today's reservations with tomorrow's business-day
@@ -13,7 +20,7 @@ follow-ups, blocking eight valid openers. November 4 had 62 genuine follow-ups, 
 today has sufficient due follow-ups per mailbox. 588-enrollment zero drift/self-check pass.
 No code or production mutation occurred during diagnosis. [x] Subsequently authorized
 midnight correction and regression verification are complete locally as recorded above;
-deployment remains pending. Evidence and boundaries are in docs/17.
+the authorized deployment is also verified above. Evidence and boundaries are in docs/17.
 
 **2026-10-29 IST mailbox rollout:** [x] explicitly authorized, pushed and deployed `7c48d24`,
 including authorized Campaigns 3/4 pauses. Campaigns 2/3/4 remain paused; automatic enrollment
