@@ -1,5 +1,12 @@
 # PROGRESS — Cold Email Campaign Tool
 
+**2026-11-05 IST low sends:** [x] read-only diagnosis/reproduction complete. Fractional
+milliseconds in local-midnight helpers inflate today's reservations with tomorrow's business-day
+follow-ups, blocking eight valid openers. November 4 had 62 genuine follow-ups, not 100;
+today has sufficient due follow-ups per mailbox. 588-enrollment zero drift/self-check pass.
+No code or production mutation. [ ] Midnight correction and regression verification remain
+unimplemented; evidence and boundaries are in docs/17.
+
 **2026-10-29 IST mailbox rollout:** [x] explicitly authorized, pushed and deployed `7c48d24`,
 including authorized Campaigns 3/4 pauses. Campaigns 2/3/4 remain paused; automatic enrollment
 off. All four mailboxes stay at 25/day. All 35 migrations, healthy services/routes, 551-enrollment

@@ -19,6 +19,15 @@ call planned work implemented.
 
 ## Current operating boundary
 
+**2026-11-05 low-send diagnosis verified:** fresh production has Campaigns 3/4 active,
+auto-enrollment off; four healthy mailboxes 25/day, 3–7 minute ranges, New York 11:00–17:00.
+Read-only reproduction confirms fractional milliseconds in local-midnight helpers include
+tomorrow's midnight follow-ups in today's reservations, blocking eight valid pending openers.
+Nov 3/4 sends were 38/62; Nov 4 had 62 actual follow-ups, so eight released openers alone
+would yield 70, not 100. Today's genuine follow-ups suffice for remaining capacity.
+588-enrollment zero drift/self-check pass. No code/settings/campaign/enrollment/send mutation;
+midnight correction remains unimplemented. See docs/17; do not assume older paused state.
+
 **2026-10-29 mailbox fixes deployed:** explicitly approved `7c48d24` is pushed/deployed,
 with explicitly approved Campaigns 3/4 pauses. Campaigns 2/3/4 remain paused, automatic
 enrollment off; four healthy mailboxes remain at 25/day and saved resume percentage 100.

@@ -1,5 +1,68 @@
 # Local canary runbook (B8.3-local) — two-week validation on throwaway Gmail
 
+## 2026-11-05 IST low daily sends — read-only diagnosis verified
+
+The operator asked why November 3/4 mailbox totals stayed below 25 with due leads.
+Fresh production checkout remains `c8f822d` (application `7c48d24`). Operator state has
+Campaigns 3/4 active, Campaign 2 paused, Campaign 1 archived; automatic enrollment off.
+All four mailboxes are `ok`, configured/effective 25/day, recovery cap NULL, 3–7 minute
+ranges and New York weekdays 11:00–17:00. Actual scheduler cron is every minute despite
+the legacy settings field saying five minutes. All 6,740 retained ticks since November 1
+were completed at inspection, including 1,800 ticks across Nov 3 17:00Z–Nov 4 23:00Z.
+No new bounce, transport/auth, missing-copy or rendering incident explains the shortfalls.
+
+Accepted sends, grouped by mailbox-local date:
+
+| Date | m1 | m2 | m3 | m4 | Total |
+| --- | --- | --- | --- | --- | --- |
+| October 30 | 25 | 25 | 25 | 25 | 100 |
+| November 2 | 25 | 23 | 22 | 23 | 93 |
+| November 3 | 12 | 11 | 10 | 5 | 38 |
+| November 4 | 13 | 14 | 15 | 20 | 62 |
+
+November 3's last sends were 16:22Z–17:03Z; November 4's were 17:09Z–17:43Z,
+well before the 22:00Z close. New York's November 1 DST fallback moved the 11:00
+opening from 15:00Z to 16:00Z correctly; it did not shorten the six-hour window.
+
+Confirmed defect: `tzOffsetMs` in `scheduler/window.ts` subtracts the full millisecond
+timestamp from wall-clock parts that have only whole-second precision. The returned
+`startOfLocalDay` / `startOfNextLocalDay` therefore retain the input milliseconds.
+`reservedWork` uses strict `< nextMidnight`; tomorrow's business-day follow-ups are
+exactly at midnight and are incorrectly included when the cutoff has positive milliseconds.
+This inflates "follow-ups due today" and consumes opener/new-enrollment slots early.
+It does not make `listDue` send those future follow-ups early.
+
+Local pure-helper reproduction, no database mutation:
+`2026-11-03T18:00:00.286Z` yields next midnight `2026-11-04T05:00:00.286Z`;
+the exact-second input yields the correct `2026-11-04T05:00:00.000Z`.
+On November 3 the actual sends plus next-day follow-ups are exactly
+12+13, 11+14, 10+15, 5+20 = 25 each, explaining the early opener cutoff.
+
+Eight valid unsent enrollments 581–588 have remained due since October 31: no assignment,
+hold, delay, snooze, suppression or erasure; Step-1 personalized copy Ready/nonempty,
+hash present, no previously sent matching content. These copy rows were last updated
+October 13. They are not blocked by missing content. November 4's 62 sends were all
+follow-ups, matching a read-only reconstruction of that day's follow-up schedule.
+Even releasing the eight blocked first emails would yield 70, rather than 100; the rest
+of the active sequence work was scheduled on later business dates, not immediately sendable.
+November 3 additionally had two reviewed Continue actions, so historical pure wait arithmetic
+alone undercounts its follow-ups by two and must not be presented as an exact replay.
+
+Read-only live repository probe at 16:23:43Z compared identical current data with the
+actual fractional clock and a whole-second clock. `listDue` returned 177 (169 follow-ups,
+eight openers). Faulty next midnight was Nov 6 05:00:00.161Z. Mailboxes reported follow-up
+reservations 80/90/83/81; exact midnight yielded 29/45/48/47. The excess is precisely
+tomorrow's work. At that snapshot sends today were 4/5/5/4, windows open, and today's
+real follow-ups already suffice to fill each remaining 25/day cap. Sending was progressing.
+Probe connections enforced `default_transaction_read_only=on`; no scheduler/poller/transport
+was instantiated or driven. Catch-up alert payloads are historical episode facts, not live
+queue counts; all catch-up alerts were acknowledged at this inspection.
+
+Canonical replay: 588 enrollments, zero differences; self-check clean. Inspection watermark
+was 3,621 events / 1,379 sends, with normal operator-enabled workers continuing independently.
+No agent code fix, settings edit, campaign pause/resume, enrollment or outbound batch was
+performed. This is verified diagnosis only; the midnight correction remains unimplemented.
+
 ## 2026-10-29 IST mailbox fixes — authorized deployment and campaign pauses verified
 
 After the local tests and live cap repair below, the operator explicitly approved pausing
