@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: coldemail
           POSTGRES_PASSWORD: coldemail_dev
@@ -92,7 +92,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: coldemail
           POSTGRES_PASSWORD: coldemail_dev
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: coldemail
           POSTGRES_PASSWORD: coldemail_dev
@@ -164,7 +164,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: coldemail
           POSTGRES_PASSWORD: coldemail_dev
