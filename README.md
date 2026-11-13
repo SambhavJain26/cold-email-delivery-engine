@@ -10,7 +10,7 @@
 [![Styling: Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20%2B%20shadcn%2Fui-38bdf8.svg)](https://tailwindcss.com/)
 [![Tests: Vitest + Playwright](https://img.shields.io/badge/Tests-Vitest%20%2B%20Playwright-729B1B.svg)](https://vitest.dev/)
 
-> A production-grade, single-operator cold email orchestration platform featuring an append-only event-sourced ledger, mathematically reconciled analytics projections, multi-mailbox SMTP/IMAP rotation, automated four-bucket inbound classification, and complete offline simulation.
+> A self-hosted, single-operator cold email orchestration platform featuring an append-only event-sourced ledger, verified analytics projections, multi-mailbox SMTP/IMAP rotation, automated four-bucket inbound classification, and complete offline simulation.
 
 ---
 
@@ -55,9 +55,9 @@ Commercial cold outbound platforms (e.g., Smartlead, Instantly, Apollo) present 
 1. **The Shared-IP Reputation Trap**: Multi-tenant SaaS vendors pool SMTP infrastructure across hundreds of accounts. A single spammer on the shared network degrades deliverability across every tenant, landing legitimate domains in Google and Microsoft spam folders.
 2. **Black-Box Metrics & Denominator Drift**: Commercial platforms frequently compute vanity statistics using manipulated denominators (e.g., calculating reply rate over total emails sent rather than unique leads contacted), creating misleading campaign telemetry and hiding severe deliverability drop-offs.
 3. **State Mutation Failures & Out-of-Order Webhooks**: Traditional CRUD backends update rows directly when webhooks arrive. If a recipient bounces after an out-of-office response, or an unsubscribe arrives after a sequence finishes, concurrent writes overwrite historical audit trails, corrupting sequence progression and violating CAN-SPAM compliance.
-4. **Runaway Operational Overhead**: Paying \$150 to \$500+ every month per operator seat for multi-tenant services adds unnecessary friction for sovereign solo operators, boutique agencies, and independent consultancies.
+4. **Runaway Operational Overhead**: Paying \$150 to \$500+ every month per operator seat for multi-tenant services adds unnecessary friction for solo operators, boutique agencies, and independent consultancies.
 
-This platform solves these bottlenecks by implementing an **authoritative, single-tenant, event-sourced outbound engine** hosted on sovereign infrastructure. It guarantees strict delivery pacing, zero external queue dependencies (PostgreSQL-backed pg-boss), deterministic projection rebuilds, and automated four-bucket IMAP inbound parsing.
+This platform solves these bottlenecks by implementing an **authoritative, single-tenant, event-sourced outbound engine** hosted on self-managed infrastructure. It guarantees strict delivery pacing, zero external queue dependencies (PostgreSQL-backed pg-boss), deterministic projection rebuilds, and automated four-bucket IMAP inbound parsing.
 
 ---
 
@@ -150,11 +150,11 @@ flowchart TD
   4. *Plain-Text Opt-Out*: Automated detection of `STOP`, `unsubscribe`, or cancel requests immediately executing compliance unenrollment.
 - **AI Sentiment Tagging (Optional Adapter)**: Structured pre-classification (`positive`, `neutral`, `negative`) via an official Anthropic API adapter. Operates with thinking disabled and fixed token budgets for sub-3-second latency, leaving human tagging as the final authority.
 
-### D. The Locked 885-Lead Golden Cohort
-The platform includes an authoritative, mathematically reconciled 885-lead benchmark cohort (Part 10 specification) verified at three testing levels:
-- **L1 Raw Events**: 885 leads folded through `applyEvent` to exact terminal outcomes: 40 Unsubscribed, 18 Hard Bounced, 47 Replied (28 Positive, 19 Neutral/Negative), 780 Completed.
-- **L2 Derived Metrics**: Exact SQL aggregate verification (Reply Rate: 8.3%, Positive Rate: 3.2%, Unsubscribe Rate: 4.6%, Bounce Rate: 2.0%, 17 Meetings Booked).
-- **L3 Full Pipeline**: 49-day virtual-clock campaign simulation executing all multi-day wait intervals, midnight cap resets, and IMAP poll loops in sub-second test execution.
+### D. Test Fixture: 885 Simulated Leads
+The test suite includes a deterministic test fixture of 885 simulated leads (`test/fixtures/golden`) used to verify state machine transitions and metrics calculations across three testing tiers (all figures below represent synthetic test data):
+- **L1 Event Ledger Replay (Test Data)**: 885 simulated leads folded through `applyEvent` to verify terminal states: 40 unsubscribed, 18 hard bounced, 47 replied (28 positive, 19 neutral or negative), 780 completed.
+- **L2 Analytics Rollup Verification (Test Data)**: Confirms that SQL aggregate queries compute expected values on the fixture data (simulated 8.3% reply rate, 3.2% positive rate, 4.6% unsubscribe rate, 2.0% bounce rate, 17 simulated meetings).
+- **L3 End-to-End Pipeline Simulation**: 49-day virtual-clock campaign simulation executing wait intervals, midnight quota resets, and IMAP polling loops in sub-second test execution.
 
 ---
 
@@ -259,7 +259,7 @@ npm run format:check
 # Run unit and integration tests (Vitest)
 npm run test
 
-# Run the locked 885-lead golden cohort regression suite
+# Run the 885-lead simulation test suite
 npm run test:golden
 
 # Run the live SMTP/IMAP transport test suite (against Docker GreenMail)
