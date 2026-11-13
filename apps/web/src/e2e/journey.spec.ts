@@ -53,7 +53,7 @@ test('operator journey: leads → sequence → campaign → enroll → unibox �
   await expect(page.getByTestId('tiers-reconciliation')).toContainText('meetings sum to 17');
 
   // 8 - Cold storage: rested leads are ready for a second pass.
-  await page.getByRole('link', { name: 'Cold Storage' }).click();
+  await page.getByRole('link', { name: 'Cold Storage', exact: true }).click();
   await expect(page.getByText(/of \d+ finished leads are ready/)).toBeVisible();
 
   // 9 - System: the projection rebuild is clean - the log and the screens agree.

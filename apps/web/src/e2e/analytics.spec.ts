@@ -80,7 +80,7 @@ test('cold storage lists rested leads and the recycle guard blocks identical con
   page,
 }) => {
   await login(page);
-  await page.getByRole('link', { name: 'Cold Storage' }).click();
+  await page.getByRole('link', { name: 'Cold Storage', exact: true }).click();
   await expect(page.getByText(/of \d+ finished leads are ready/)).toBeVisible();
   await expect(page.getByTestId('next-eligible')).toBeVisible();
 
@@ -91,7 +91,7 @@ test('cold storage lists rested leads and the recycle guard blocks identical con
   await page.getByRole('button', { name: 'Create campaign' }).click();
   await expect(page).toHaveURL(/\/campaigns\/\d+$/);
 
-  await page.getByRole('link', { name: 'Cold Storage' }).click();
+  await page.getByRole('link', { name: 'Cold Storage', exact: true }).click();
   await page.getByRole('button', { name: 'Recycle into campaign…' }).click();
   await page.getByLabel('Target campaign (draft only)').click();
   await page.getByRole('option', { name: 'Pass 2 - same message' }).click();
@@ -124,7 +124,7 @@ test('recycling into a campaign with a new sequence succeeds', async ({ page }) 
   await page.getByRole('option', { name: /Listing automation angle/ }).click();
   await page.getByRole('button', { name: 'Create campaign' }).click();
 
-  await page.getByRole('link', { name: 'Cold Storage' }).click();
+  await page.getByRole('link', { name: 'Cold Storage', exact: true }).click();
   await page.getByRole('button', { name: 'Recycle into campaign…' }).click();
   await page.getByLabel('Target campaign (draft only)').click();
   await page.getByRole('option', { name: 'Pass 2 - new angle' }).click();
