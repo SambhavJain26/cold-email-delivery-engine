@@ -1,6 +1,5 @@
 # Event-Sourced Cold Email & Deliverability Engine
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node.js: >=22](https://img.shields.io/badge/Node.js-%3E%3D22-green.svg)](https://nodejs.org/)
 [![TypeScript: 5.7+](https://img.shields.io/badge/TypeScript-5.7%2B-blue.svg)](https://www.typescriptlang.org/)
 [![Framework: Fastify 5.x](https://img.shields.io/badge/Framework-Fastify%205.x-black.svg)](https://fastify.dev/)
@@ -284,7 +283,6 @@ bash scripts/restore-drill.sh
 
 ---
 
-## 9. License & Authorship
+## 9. Authorship & Project Metadata
 
-- **Architect & Author**: Sambhav Jain
-- **License**: MIT License: see the [LICENSE](LICENSE) file for complete details.
+- **Lead Systems Architect**: Sambhav Jain
