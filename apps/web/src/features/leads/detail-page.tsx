@@ -198,7 +198,7 @@ function EditCard({ lead }: { lead: LeadDto & { notes: string | null } }) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={UNTIERED}> -  untiered</SelectItem>
+              <SelectItem value={UNTIERED}> - untiered</SelectItem>
               <SelectItem value="A">🟢 Tier A</SelectItem>
               <SelectItem value="B">🟡 Tier B</SelectItem>
               <SelectItem value="C">⚪ Tier C</SelectItem>

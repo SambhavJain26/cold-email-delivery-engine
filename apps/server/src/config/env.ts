@@ -37,7 +37,7 @@ export const envSchema = z
     TEST_DATABASE_URL: z.url().optional(),
   })
   .superRefine((cfg, ctx) => {
-    // A simulated clock against real SMTP/IMAP would burst-send the backlog - 
+    // A simulated clock against real SMTP/IMAP would burst-send the backlog -
     // refuse loudly (docs/13 §5: mock builds only).
     if (cfg.SIMULATED_CLOCK && cfg.MAIL_TRANSPORT === 'smtp_imap') {
       ctx.addIssue({

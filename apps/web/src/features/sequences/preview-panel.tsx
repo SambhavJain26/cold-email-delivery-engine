@@ -165,7 +165,7 @@ export function PreviewPanel({
                     data-testid="preview-footer"
                   >
                     <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                      <Lock className="size-3" aria-hidden /> Appended to every send - {' '}
+                      <Lock className="size-3" aria-hidden /> Appended to every send -{' '}
                       <Link to="/settings" className="underline">
                         edit in Compliance settings
                       </Link>
