@@ -1,6 +1,6 @@
 # Architecture - Repo Layout, Process Model, Module Boundaries
 
-Refines [build_plan.md](../build_plan.md) §3 into the concrete shape the code takes. Decisions referenced by letter live in [01-decisions.md](01-decisions.md).
+Refines [build_plan.md](build_plan.md) §3 into the concrete shape the code takes. Decisions referenced by letter live in [01-decisions.md](01-decisions.md).
 
 ---
 

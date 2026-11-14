@@ -1,8 +1,8 @@
 # Documentation Index - Cold Email Campaign Tool
 
-**This folder is the complete low-level build documentation.** The three root-level documents ([build_plan.md](../build_plan.md), [event_model_spec.md](../event_model_spec.md), [campaign_walkthrough_v2.md](../campaign_walkthrough_v2.md)) define *what* the system is and the high-level build order. The files here go one level deeper: every table column, every algorithm, every endpoint, every screen, every task - detailed enough that development can start at task B0.1 and proceed without further design work.
+**This folder is the complete low-level build documentation.** The three design documents ([build_plan.md](build_plan.md), [event_model_spec.md](event_model_spec.md), [campaign_walkthrough_v2.md](campaign_walkthrough_v2.md)) define *what* the system is and the high-level build order. The files here go one level deeper: every table column, every algorithm, every endpoint, every screen, every task - detailed enough that development can start at task B0.1 and proceed without further design work.
 
-Progress is tracked in [PROGRESS.md](../PROGRESS.md) at the repo root.
+Progress is tracked in [PROGRESS.md](PROGRESS.md).
 
 ---
 
@@ -33,7 +33,7 @@ Progress is tracked in [PROGRESS.md](../PROGRESS.md) at the repo root.
 1. **Before writing any code:** 01 (decisions) → 02 (architecture) → 14 + 15 (the two stage plans) → skim 10 (API contract).
 2. **Before each backend stage:** the subsystem doc(s) listed in its stage entry in 14.
 3. **Before each frontend stage:** 11 once, then the relevant screens in 12.
-4. **Continuously:** [PROGRESS.md](../PROGRESS.md) - tick tasks as they complete; log blockers.
+4. **Continuously:** [PROGRESS.md](PROGRESS.md) - tick tasks as they complete; log blockers.
 
 ## How the two tracks interlock
 
@@ -41,7 +41,7 @@ The build is contract-first. [10-api-contract.md](10-api-contract.md) is the sea
 
 - The **backend track (B0-B8)** builds correctness-critical logic first (B0-B3), then workflow (B4-B5), then implements the contract (B6), then hardens (B7) and goes live (B8).
 - The **frontend track (F0-F8)** starts from the contract alone: F0 stands up the app with MSW request mocks that serve golden-cohort fixture data shaped exactly per the contract. Every frontend stage is buildable against mocks and *integrates* (mocks off, real API on) once the matching B6 route group lands.
-- **Milestones** (M1-M4) are defined in [PROGRESS.md](../PROGRESS.md). Solo-dev recommended order: B0→B3 uninterrupted (the proven core), then B4→B6, then F0→F8, then B7, B8.
+- **Milestones** (M1-M4) are defined in [PROGRESS.md](PROGRESS.md). Solo-dev recommended order: B0→B3 uninterrupted (the proven core), then B4→B6, then F0→F8, then B7, B8.
 
 ## Glossary
 

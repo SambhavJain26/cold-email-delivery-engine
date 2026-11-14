@@ -1,6 +1,6 @@
 # Decision Register
 
-Every design decision, in one place. Decisions **A-F** come from [build_plan.md](../build_plan.md) §1 and are now **confirmed and locked**. Decisions **G-Z** are new low-level choices made to take the plan from "architecture" to "start typing" - each has a rationale and a swap cost so revisiting any of them is a bounded change, not archaeology.
+Every design decision, in one place. Decisions **A-F** come from [build_plan.md](build_plan.md) §1 and are now **confirmed and locked**. Decisions **G-Z** are new low-level choices made to take the plan from "architecture" to "start typing" - each has a rationale and a swap cost so revisiting any of them is a bounded change, not archaeology.
 
 Status meaning: 🔒 locked (change requires editing this file first) · 🔧 default (safe to flip via config/settings without touching docs).
 

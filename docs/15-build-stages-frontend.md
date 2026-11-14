@@ -1,6 +1,6 @@
 # Frontend Build Stages - F0-F8 (task level)
 
-The frontend track. Buildable against MSW mocks from F0 (needs only the frozen contract, docs/10, + golden fixtures from B2.18). Each stage lists its **integration point** - the backend stage after which the screens run against the real API. Task IDs mirrored in [PROGRESS.md](../PROGRESS.md).
+The frontend track. Buildable against MSW mocks from F0 (needs only the frozen contract, docs/10, + golden fixtures from B2.18). Each stage lists its **integration point** - the backend stage after which the screens run against the real API. Task IDs mirrored in [PROGRESS.md](PROGRESS.md).
 
 **Screen specs:** [12-frontend-screens.md](12-frontend-screens.md). **Conventions:** [11-frontend-architecture.md](11-frontend-architecture.md).
 

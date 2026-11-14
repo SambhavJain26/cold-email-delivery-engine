@@ -1,6 +1,6 @@
 # Backend Build Stages - B0-B8 (task level)
 
-The backend track. Task IDs here are mirrored in [PROGRESS.md](../PROGRESS.md) (tick there, not here). Each stage ends with its **gate** - all listed tests green - before the next begins. Read-before docs listed per stage. Frontend track: [15-build-stages-frontend.md](15-build-stages-frontend.md).
+The backend track. Task IDs here are mirrored in [PROGRESS.md](PROGRESS.md) (tick there, not here). Each stage ends with its **gate** - all listed tests green - before the next begins. Read-before docs listed per stage. Frontend track: [15-build-stages-frontend.md](15-build-stages-frontend.md).
 
 ---
 
